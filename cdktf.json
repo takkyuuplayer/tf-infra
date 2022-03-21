@@ -2,10 +2,10 @@
   "language": "typescript",
   "app": "npx ts-node main.ts",
   "projectId": "9c42ce77-790d-4b10-8e4c-dde930ff52c5",
-  "terraformProviders": [],
+  "terraformProviders": ["cloudflare/cloudflare@~> 3.0"],
   "terraformModules": [],
   "context": {
     "excludeStackIdFromLogicalIds": "true",
-"allowSepCharsInLogicalIds": "true"
+    "allowSepCharsInLogicalIds": "true"
   }
 }
