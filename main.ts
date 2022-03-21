@@ -61,6 +61,20 @@ class CloudflareStack extends TerraformStack {
         value: record.value,
       });
     });
+
+    new Record(this, "spf", {
+      name: "@",
+      zoneId: zone.zoneId,
+      value:
+        "v=spf1 include:_spf.google.com include:_amazonses.takkyuuplayer.com ~all",
+      type: "TXT",
+    });
+    new Record(this, "dmarc", {
+      name: "_dmarc",
+      zoneId: zone.zoneId,
+      value: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
+      type: "TXT",
+    });
   }
 }
 
