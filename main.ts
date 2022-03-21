@@ -1,4 +1,5 @@
 import { AwsProvider } from "@cdktf/provider-aws";
+import { DataAwsCloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront";
 import { App, S3Backend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import {
@@ -28,9 +29,13 @@ class CloudflareStack extends TerraformStack {
     super(scope, name);
 
     new CloudflareProvider(this, "cloudflare");
+    new AwsProvider(this, "aws", {
+      region: "ap-northeast-1",
+    });
     const zone = new DataCloudflareZone(this, "takkyuuplayer.com", {
       name: "takkyuuplayer.com",
     });
+
     [
       {
         priority: 1,
@@ -74,6 +79,34 @@ class CloudflareStack extends TerraformStack {
       zoneId: zone.zoneId,
       value: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
       type: "TXT",
+    });
+
+    [
+      {
+        fqdn: "takkyuuplayer.com",
+        cloudfrontId: "E1G6FSVIWAIZ4",
+        name: "@",
+      },
+      {
+        fqdn: "www.takkyuuplayer.com",
+        cloudfrontId: "E3HUV11AFSHUKJ",
+        name: "www",
+      },
+    ].forEach((record) => {
+      const cf = new DataAwsCloudfrontDistribution(
+        this,
+        `Cloudfront/${record.fqdn}`,
+        {
+          id: record.cloudfrontId,
+        }
+      );
+      new Record(this, `CNAME/${record.fqdn}`, {
+        name: record.name,
+        zoneId: zone.zoneId,
+        value: cf.domainName,
+        type: "CNAME",
+        proxied: true,
+      });
     });
   }
 }
