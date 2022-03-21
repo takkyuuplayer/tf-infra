@@ -1,14 +1,14 @@
 import { AwsProvider } from "@cdktf/provider-aws";
 import { DataAwsCloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront";
-import { App, S3Backend, TerraformStack } from "cdktf";
+import { S3Backend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import {
   CloudflareProvider,
   DataCloudflareZone,
   Record,
-} from "./.gen/providers/cloudflare";
+} from "../.gen/providers/cloudflare";
 
-class StateStack extends TerraformStack {
+export class TpStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
@@ -105,7 +105,3 @@ function Cloudflare(scope: Construct) {
     });
   });
 }
-
-const app = new App();
-new StateStack(app, "tf-infra-state");
-app.synth();
