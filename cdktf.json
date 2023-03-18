@@ -2,7 +2,8 @@
   "language": "typescript",
   "app": "npx ts-node main.ts",
   "projectId": "9c42ce77-790d-4b10-8e4c-dde930ff52c5",
-  "terraformProviders": ["cloudflare/cloudflare@~> 3.0"],
+  "sendCrashReports": "true",
+  "terraformProviders": [],
   "terraformModules": [],
   "context": {
     "excludeStackIdFromLogicalIds": "true",

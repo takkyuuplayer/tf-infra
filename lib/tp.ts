@@ -1,12 +1,10 @@
-import { AwsProvider } from "@cdktf/provider-aws";
-import { DataAwsCloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront";
+import { DataAwsCloudfrontDistribution } from "@cdktf/provider-aws/lib/data-aws-cloudfront-distribution";
+import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
+import { DataCloudflareZone } from "@cdktf/provider-cloudflare/lib/data-cloudflare-zone";
+import { CloudflareProvider } from "@cdktf/provider-cloudflare/lib/provider";
+import { Record } from "@cdktf/provider-cloudflare/lib/record";
 import { S3Backend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
-import {
-  CloudflareProvider,
-  DataCloudflareZone,
-  Record,
-} from "../.gen/providers/cloudflare";
 
 export class TpStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
