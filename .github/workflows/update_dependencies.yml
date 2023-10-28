@@ -1,0 +1,36 @@
+name: Update Dependencies
+on:
+  schedule:
+    - cron: "13 21 8 * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: update package.json dependencies
+        run: |
+          npx npm-check-updates -u
+          npm install
+
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update dependencies"
+          title: "Update dependencies"
+          branch: "update-dependencies"
+          delete-branch: true
+          reviewers: takkyuuplayer
+          body: |
+            Run
+
+            ```
+            $ git fetch --all
+            $ git checkout update-dependencies
+            $ git reset --hard origin/update-dependencies
+            $ npx cdktf-cli diff
+            ```
