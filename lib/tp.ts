@@ -1,4 +1,3 @@
-import { DataAwsCloudfrontDistribution } from "@cdktf/provider-aws/lib/data-aws-cloudfront-distribution";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { DataCloudflareZone } from "@cdktf/provider-cloudflare/lib/data-cloudflare-zone";
 import { CloudflareProvider } from "@cdktf/provider-cloudflare/lib/provider";
@@ -75,31 +74,18 @@ function Cloudflare(scope: Construct) {
     type: "TXT",
   });
 
-  [
-    {
-      fqdn: "takkyuuplayer.com",
-      cloudfrontId: "E1G6FSVIWAIZ4",
-      name: "@",
-    },
-    {
-      fqdn: "www.takkyuuplayer.com",
-      cloudfrontId: "E3HUV11AFSHUKJ",
-      name: "www",
-    },
-  ].forEach((record) => {
-    const cf = new DataAwsCloudfrontDistribution(
-      scope,
-      `Cloudfront/${record.fqdn}`,
-      {
-        id: record.cloudfrontId,
-      }
-    );
-    new Record(scope, `CNAME/${record.fqdn}`, {
-      name: record.name,
-      zoneId: zone.zoneId,
-      value: cf.domainName,
-      type: "CNAME",
-      proxied: true,
-    });
+  new Record(scope, `CNAME/www.takkyuuplayer.com`, {
+    name: "@",
+    zoneId: zone.zoneId,
+    value: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    type: "CNAME",
+    proxied: true,
+  });
+  new Record(scope, `CNAME/takkyuuplayer.com`, {
+    name: "www",
+    zoneId: zone.zoneId,
+    value: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    type: "CNAME",
+    proxied: true,
   });
 }
