@@ -20,18 +20,18 @@
     "node": ">=14.0"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^19.4.0",
-    "@cdktf/provider-cloudflare": "^11.2.0",
-    "cdktf": "^0.20.3",
+    "@cdktf/provider-aws": "^19.9.0",
+    "@cdktf/provider-cloudflare": "^11.4.0",
+    "cdktf": "^0.20.4",
     "constructs": "^10.3.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.17",
-    "cdktf-cli": "^0.20.3",
+    "@types/node": "^20.11.25",
+    "cdktf-cli": "^0.20.4",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   }
 }
