@@ -32,59 +32,59 @@ function Cloudflare(scope: Construct) {
   [
     {
       priority: 1,
-      value: "aspmx.l.google.com",
+      content: "aspmx.l.google.com",
     },
     {
       priority: 5,
-      value: "alt1.aspmx.l.google.com",
+      content: "alt1.aspmx.l.google.com",
     },
     {
       priority: 5,
-      value: "alt2.aspmx.l.google.com",
+      content: "alt2.aspmx.l.google.com",
     },
     {
       priority: 10,
-      value: "alt3.aspmx.l.google.com",
+      content: "alt3.aspmx.l.google.com",
     },
     {
       priority: 10,
-      value: "alt4.aspmx.l.google.com",
+      content: "alt4.aspmx.l.google.com",
     },
   ].forEach((record) => {
-    new Record(scope, record.value, {
+    new Record(scope, record.content, {
       name: "@",
       zoneId: zone.zoneId,
       type: "MX",
       priority: record.priority,
-      value: record.value,
+      content: record.content,
     });
   });
 
   new Record(scope, "spf", {
     name: "@",
     zoneId: zone.zoneId,
-    value:
+    content:
       "v=spf1 include:_spf.google.com include:_amazonses.takkyuuplayer.com ~all",
     type: "TXT",
   });
   new Record(scope, "dmarc", {
     name: "_dmarc",
     zoneId: zone.zoneId,
-    value: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
+    content: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
     type: "TXT",
   });
 
   new Record(scope, `CNAME/www.takkyuuplayer.com`, {
     name: "@",
     zoneId: zone.zoneId,
-    value: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    content: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
   });
   new Record(scope, `CNAME/takkyuuplayer.com`, {
     name: "www",
     zoneId: zone.zoneId,
-    value: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    content: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
   });
