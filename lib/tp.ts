@@ -2,7 +2,7 @@ import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { DataCloudflareZone } from "@cdktf/provider-cloudflare/lib/data-cloudflare-zone";
 import { DnsRecord } from "@cdktf/provider-cloudflare/lib/dns-record";
 import { CloudflareProvider } from "@cdktf/provider-cloudflare/lib/provider";
-import { S3Backend, TerraformStack } from "cdktf";
+import { S3Backend, TerraformStack, TerraformVariable } from "cdktf";
 import { Construct } from "constructs";
 
 export class TpStack extends TerraformStack {
@@ -25,10 +25,11 @@ export class TpStack extends TerraformStack {
 function Cloudflare(scope: Construct) {
   new CloudflareProvider(scope, "cloudflare");
 
+  const zoneId = new TerraformVariable(scope, "cloudflare_zone_id", {
+    type: "string",
+  });
   const zone = new DataCloudflareZone(scope, "takkyuuplayer.com", {
-    filter: {
-      name: "takkyuuplayer.com",
-    },
+    zoneId: zoneId.value,
   });
 
   [
@@ -85,7 +86,7 @@ function Cloudflare(scope: Construct) {
     content: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
-    ttl: 60,
+    ttl: 1,
   });
   new DnsRecord(scope, `CNAME/takkyuuplayer.com`, {
     name: "www",
@@ -93,6 +94,6 @@ function Cloudflare(scope: Construct) {
     content: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
-    ttl: 60,
+    ttl: 1,
   });
 }
