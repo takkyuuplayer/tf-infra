@@ -1,7 +1,7 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { DataCloudflareZone } from "@cdktf/provider-cloudflare/lib/data-cloudflare-zone";
+import { DnsRecord } from "@cdktf/provider-cloudflare/lib/dns-record";
 import { CloudflareProvider } from "@cdktf/provider-cloudflare/lib/provider";
-import { Record } from "@cdktf/provider-cloudflare/lib/record";
 import { S3Backend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 
@@ -26,7 +26,9 @@ function Cloudflare(scope: Construct) {
   new CloudflareProvider(scope, "cloudflare");
 
   const zone = new DataCloudflareZone(scope, "takkyuuplayer.com", {
-    name: "takkyuuplayer.com",
+    filter: {
+      name: "takkyuuplayer.com",
+    },
   });
 
   [
@@ -51,41 +53,46 @@ function Cloudflare(scope: Construct) {
       content: "alt4.aspmx.l.google.com",
     },
   ].forEach((record) => {
-    new Record(scope, record.content, {
+    new DnsRecord(scope, record.content, {
       name: "@",
       zoneId: zone.zoneId,
       type: "MX",
       priority: record.priority,
       content: record.content,
+      ttl: 60,
     });
   });
 
-  new Record(scope, "spf", {
+  new DnsRecord(scope, "spf", {
     name: "@",
     zoneId: zone.zoneId,
     content:
       "v=spf1 include:_spf.google.com include:_amazonses.takkyuuplayer.com ~all",
     type: "TXT",
+    ttl: 60,
   });
-  new Record(scope, "dmarc", {
+  new DnsRecord(scope, "dmarc", {
     name: "_dmarc",
     zoneId: zone.zoneId,
     content: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
     type: "TXT",
+    ttl: 60,
   });
 
-  new Record(scope, `CNAME/www.takkyuuplayer.com`, {
+  new DnsRecord(scope, `CNAME/www.takkyuuplayer.com`, {
     name: "@",
     zoneId: zone.zoneId,
     content: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
+    ttl: 60,
   });
-  new Record(scope, `CNAME/takkyuuplayer.com`, {
+  new DnsRecord(scope, `CNAME/takkyuuplayer.com`, {
     name: "www",
     zoneId: zone.zoneId,
     content: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
     type: "CNAME",
     proxied: true,
+    ttl: 60,
   });
 }
