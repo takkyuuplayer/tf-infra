@@ -22,12 +22,10 @@ export function GitHub(scope: Construct) {
   });
 
   [
-    "aws-provisioning",
     "go-exercise",
     "homepage4.0",
     "rb-exercise",
     "rs-exercise",
-    "tf-infra",
     "ts-exercise",
   ].forEach((repo) => {
     new ActionsSecret(scope, `${repo}/app_id`, {
