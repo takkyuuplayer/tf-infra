@@ -1,4 +1,5 @@
 import { ActionsSecret } from "@cdktf/provider-github/lib/actions-secret";
+import { BranchProtection } from "@cdktf/provider-github/lib/branch-protection";
 import { GithubProvider } from "@cdktf/provider-github/lib/provider";
 import { TerraformVariable } from "cdktf";
 import { Construct } from "constructs";
@@ -37,6 +38,25 @@ export function GitHub(scope: Construct) {
       repository: repo,
       secretName: "CI_APP_PRIVATE_KEY",
       plaintextValue: githubCiAppPrivateKey.value,
+    });
+    new BranchProtection(scope, `${repo}/main_protection`, {
+      repositoryId: repo,
+      pattern: "main",
+      enforceAdmins: true,
+      requiredStatusChecks: [
+        {
+          strict: false, // Require branches to be up to date before merging
+          contexts: ["CI"], // Require CI to pass (adjust this to match your actual CI check name)
+        },
+      ],
+      requiredPullRequestReviews: [
+        {
+          dismissStaleReviews: false,
+          requireCodeOwnerReviews: false,
+        },
+      ],
+      allowsForcePushes: false,
+      allowsDeletions: false,
     });
   });
 }
