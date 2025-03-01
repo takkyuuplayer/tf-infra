@@ -5,6 +5,7 @@ import { TerraformVariable } from "cdktf";
 import { Construct } from "constructs";
 
 export function GitHub(scope: Construct) {
+  // https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
   const githubCiAppId = new TerraformVariable(scope, "github_ci_app_id", {
     type: "string",
   });
