@@ -43,12 +43,6 @@ export function GitHub(scope: Construct) {
       repositoryId: repo,
       pattern: "main",
       enforceAdmins: true,
-      requiredStatusChecks: [
-        {
-          strict: false, // Require branches to be up to date before merging
-          contexts: ["CI"], // Require CI to pass (adjust this to match your actual CI check name)
-        },
-      ],
       requiredPullRequestReviews: [
         {
           dismissStaleReviews: false,
