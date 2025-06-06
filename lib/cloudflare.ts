@@ -7,10 +7,11 @@ import { Construct } from "constructs";
 export function Cloudflare(scope: Construct) {
   new CloudflareProvider(scope, "cloudflare");
 
+  const domain = "takkyuuplayer.com";
   const zoneId = new TerraformVariable(scope, "cloudflare_zone_id", {
     type: "string",
   });
-  const zone = new DataCloudflareZone(scope, "takkyuuplayer.com", {
+  const zone = new DataCloudflareZone(scope, domain, {
     zoneId: zoneId.value,
   });
 
@@ -37,7 +38,7 @@ export function Cloudflare(scope: Construct) {
     },
   ].forEach((record) => {
     new DnsRecord(scope, record.content, {
-      name: "@",
+      name: domain,
       zoneId: zone.zoneId,
       type: "MX",
       priority: record.priority,
@@ -47,33 +48,32 @@ export function Cloudflare(scope: Construct) {
   });
 
   new DnsRecord(scope, "spf", {
-    name: "@",
+    name: domain,
     zoneId: zone.zoneId,
-    content:
-      "v=spf1 include:_spf.google.com include:_amazonses.takkyuuplayer.com ~all",
+    content: `v=spf1 include:_spf.google.com include:_amazonses.${domain} ~all`,
     type: "TXT",
     ttl: 60,
   });
   new DnsRecord(scope, "dmarc", {
-    name: "_dmarc",
+    name: `_dmarc.${domain}`,
     zoneId: zone.zoneId,
     content: "v=DMARC1; p=none; rua=mailto:takkyuuplayer@gmail.com",
     type: "TXT",
     ttl: 60,
   });
 
-  new DnsRecord(scope, `CNAME/www.takkyuuplayer.com`, {
-    name: "@",
+  new DnsRecord(scope, `CNAME/www.${domain}`, {
+    name: domain,
     zoneId: zone.zoneId,
-    content: "www.takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    content: `www.${domain}.s3-website-ap-northeast-1.amazonaws.com`,
     type: "CNAME",
     proxied: true,
     ttl: 1,
   });
-  new DnsRecord(scope, `CNAME/takkyuuplayer.com`, {
-    name: "www",
+  new DnsRecord(scope, `CNAME/${domain}`, {
+    name: `www.${domain}`,
     zoneId: zone.zoneId,
-    content: "takkyuuplayer.com.s3-website-ap-northeast-1.amazonaws.com",
+    content: `${domain}.s3-website-ap-northeast-1.amazonaws.com`,
     type: "CNAME",
     proxied: true,
     ttl: 1,
