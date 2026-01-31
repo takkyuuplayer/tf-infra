@@ -2,8 +2,21 @@ version: 2
 
 updates:
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "/" # https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#directories-or-directory--
     schedule:
-      interval: "monthly"
-    reviewers:
-      - takkyuuplayer
+      interval: "cron"
+      cronjob: "0 0 1 * *"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: "npm"
+    directories:
+      - "**/*"
+    schedule:
+      interval: "cron"
+      cronjob: "0 0 1 * *"
+    groups:
+      npm:
+        patterns:
+          - "*"
