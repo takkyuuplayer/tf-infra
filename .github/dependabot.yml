@@ -10,13 +10,12 @@ updates:
       github-actions:
         patterns:
           - "*"
-  - package-ecosystem: "npm"
-    directories:
-      - "**/*"
+  - package-ecosystem: "terraform"
+    directory: "/"
     schedule:
       interval: "cron"
       cronjob: "0 0 1 * *"
     groups:
-      npm:
+      terraform:
         patterns:
           - "*"
