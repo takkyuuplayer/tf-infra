@@ -1,14 +1,12 @@
-resource "github_branch_protection" "main" {
-  for_each = toset([
-    "go-exercise",
-    "homepage4.0",
-    "rb-exercise",
-    "rs-exercise",
-    "ts-exercise",
-  ])
+data "github_repositories" "source" {
+  query = "user:takkyuuplayer archived:false fork:false"
+}
 
-  repository_id = each.key
-  pattern       = "main"
+resource "github_branch_protection" "main" {
+  for_each = toset(data.github_repositories.source.names)
+
+  repository_id  = each.key
+  pattern        = "main"
   enforce_admins = true
 
   required_pull_request_reviews {
