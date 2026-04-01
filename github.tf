@@ -25,12 +25,6 @@ resource "github_repository" "repos" {
   }
 }
 
-import {
-  for_each = local.github_repos
-  to       = github_repository.repos[each.key]
-  id       = each.key
-}
-
 resource "github_branch_protection" "main" {
   for_each = local.github_repos
 
