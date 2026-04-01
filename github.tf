@@ -24,7 +24,7 @@ resource "github_repository" "repos" {
   has_wiki                    = true
 
   lifecycle {
-    ignore_changes = [description, has_downloads]
+    ignore_changes = [description]
   }
 }
 
