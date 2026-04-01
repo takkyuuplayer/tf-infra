@@ -19,9 +19,12 @@ resource "github_repository" "repos" {
   squash_merge_commit_title   = "PR_TITLE"
   squash_merge_commit_message = "BLANK"
   delete_branch_on_merge      = true
+  has_issues                  = true
+  has_projects                = true
+  has_wiki                    = true
 
   lifecycle {
-    ignore_changes = [description]
+    ignore_changes = [description, has_downloads]
   }
 }
 
