@@ -43,6 +43,10 @@ resource "github_repository" "repos" {
   squash_merge_commit_title   = "PR_TITLE"
   squash_merge_commit_message = "PR_BODY"
   delete_branch_on_merge      = true
+
+  lifecycle {
+    ignore_changes = [description]
+  }
 }
 
 import {
