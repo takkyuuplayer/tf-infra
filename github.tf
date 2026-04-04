@@ -37,8 +37,8 @@ import {
 resource "github_branch_protection" "main" {
   for_each = local.github_repos
 
-  repository_id = each.key
-  pattern       = "main"
+  repository_id  = each.key
+  pattern        = "main"
   enforce_admins = true
 
   required_status_checks {
