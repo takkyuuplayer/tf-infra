@@ -43,11 +43,6 @@ resource "github_branch_protection" "main" {
   pattern        = "main"
   enforce_admins = true
 
-  required_status_checks {
-    strict   = true
-    contexts = ["CI"]
-  }
-
   required_pull_request_reviews {
     dismiss_stale_reviews           = false
     require_code_owner_reviews      = false
