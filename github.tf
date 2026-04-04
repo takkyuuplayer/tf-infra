@@ -1,9 +1,11 @@
 locals {
   github_repos = toset([
+    "aws-provisioning",
     "go-exercise",
     "homepage4.0",
     "rb-exercise",
     "rs-exercise",
+    "tf-infra",
     "ts-exercise",
   ])
 }
