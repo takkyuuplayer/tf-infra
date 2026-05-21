@@ -36,24 +36,37 @@ import {
   id       = each.key
 }
 
-resource "github_branch_protection" "main" {
+resource "github_repository_ruleset" "main" {
   for_each = local.github_repos
 
-  repository_id  = each.key
-  pattern        = "main"
-  enforce_admins = true
+  name        = "main"
+  repository  = each.key
+  target      = "branch"
+  enforcement = "active"
 
-  required_status_checks {
-    strict   = true
-    contexts = ["CI"]
+  conditions {
+    ref_name {
+      include = ["~DEFAULT_BRANCH"]
+      exclude = []
+    }
   }
 
-  required_pull_request_reviews {
-    dismiss_stale_reviews           = false
-    require_code_owner_reviews      = false
-    required_approving_review_count = 0
-  }
+  rules {
+    deletion         = true
+    non_fast_forward = false
 
-  allows_force_pushes = false
-  allows_deletions    = false
+    pull_request {
+      dismiss_stale_reviews_on_push   = false
+      require_code_owner_review       = false
+      required_approving_review_count = 0
+    }
+
+    required_status_checks {
+      strict_required_status_checks_policy = true
+
+      required_check {
+        context = "CI"
+      }
+    }
+  }
 }
