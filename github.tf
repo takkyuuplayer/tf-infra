@@ -53,7 +53,7 @@ resource "github_repository_ruleset" "main" {
 
   rules {
     deletion         = true
-    non_fast_forward = true
+    non_fast_forward = false
 
     pull_request {
       dismiss_stale_reviews_on_push   = false
