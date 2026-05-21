@@ -26,7 +26,7 @@ resource "github_repository" "repos" {
   has_wiki                    = true
 
   lifecycle {
-    ignore_changes = [description]
+    ignore_changes = [description, merge_commit_title, merge_commit_message]
   }
 }
 
