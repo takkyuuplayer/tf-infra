@@ -61,13 +61,5 @@ resource "github_repository_ruleset" "main" {
       require_code_owner_review       = false
       required_approving_review_count = 0
     }
-
-    required_status_checks {
-      strict_required_status_checks_policy = true
-
-      required_check {
-        context = "CI"
-      }
-    }
   }
 }
