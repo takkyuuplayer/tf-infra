@@ -3,7 +3,9 @@ locals {
 }
 
 data "cloudflare_zone" "main" {
-  zone_id = var.cloudflare_zone_id
+  filter = {
+    name = local.domain
+  }
 }
 
 resource "cloudflare_dns_record" "mx" {
