@@ -21,12 +21,24 @@ terraform {
   }
 }
 
+data "aws_secretsmanager_secret" "tf_infra" {
+  name = "tf-infra"
+}
+
+ephemeral "aws_secretsmanager_secret_version" "tf_infra" {
+  secret_id = data.aws_secretsmanager_secret.tf_infra.id
+}
+
+locals {
+  secrets = jsondecode(ephemeral.aws_secretsmanager_secret_version.tf_infra.secret_string)
+}
+
 provider "aws" {
   region = "ap-northeast-1"
 }
 
 provider "cloudflare" {
-  api_token = var.cloudflare_api_token
+  api_token = local.secrets.cloudflare_api_token
 }
 
 provider "github" {
