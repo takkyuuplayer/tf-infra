@@ -3,6 +3,7 @@ locals {
     "aws-provisioning",
     "go-exercise",
     "homepage4.0",
+    "homepage5.0",
     "rb-exercise",
     "rs-exercise",
     "tf-infra",
