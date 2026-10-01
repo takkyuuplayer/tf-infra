@@ -41,20 +41,40 @@ resource "cloudflare_dns_record" "dmarc" {
   ttl     = 60
 }
 
-resource "cloudflare_dns_record" "cname_root" {
-  name    = local.domain
+resource "cloudflare_workers_custom_domain" "root" {
+  account_id = data.cloudflare_zone.main.account.id
+  zone_id    = data.cloudflare_zone.main.zone_id
+  hostname   = local.domain
+  service    = "homepage5"
+}
+
+# www は redirect rule を効かせるためだけのレコード。proxied なので 192.0.2.0 には届かない
+resource "cloudflare_dns_record" "www" {
+  name    = "www.${local.domain}"
   zone_id = data.cloudflare_zone.main.zone_id
-  content = "www.${local.domain}.s3-website-ap-northeast-1.amazonaws.com"
-  type    = "CNAME"
+  content = "192.0.2.0"
+  type    = "A"
   proxied = true
   ttl     = 1
 }
 
-resource "cloudflare_dns_record" "cname_www" {
-  name    = "www.${local.domain}"
+resource "cloudflare_ruleset" "redirect" {
   zone_id = data.cloudflare_zone.main.zone_id
-  content = "${local.domain}.s3-website-ap-northeast-1.amazonaws.com"
-  type    = "CNAME"
-  proxied = true
-  ttl     = 1
+  name    = "redirect"
+  kind    = "zone"
+  phase   = "http_request_dynamic_redirect"
+  rules = [{
+    description = "www to apex"
+    expression  = "(http.host eq \"www.${local.domain}\")"
+    action      = "redirect"
+    action_parameters = {
+      from_value = {
+        status_code           = 301
+        preserve_query_string = true
+        target_url = {
+          expression = "concat(\"https://${local.domain}\", http.request.uri.path)"
+        }
+      }
+    }
+  }]
 }
