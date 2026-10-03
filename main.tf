@@ -37,6 +37,12 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
+# CloudFront に付ける ACM 証明書は us-east-1 で発行する必要がある
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
 provider "cloudflare" {
   api_token = local.secrets.cloudflare_api_token
 }
