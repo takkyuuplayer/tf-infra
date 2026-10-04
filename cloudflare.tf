@@ -112,3 +112,11 @@ resource "cloudflare_zero_trust_access_policy" "preview" {
     }
   ]
 }
+
+resource "cloudflare_zero_trust_access_identity_provider" "onetimepin" {
+  account_id = data.cloudflare_zone.main.account.id
+
+  name   = "onetimepin"
+  type   = "onetimepin"
+  config = {}
+}
