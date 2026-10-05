@@ -78,3 +78,36 @@ resource "cloudflare_ruleset" "redirect" {
     }
   }]
 }
+
+resource "cloudflare_zero_trust_access_application" "preview" {
+  account_id = data.cloudflare_zone.main.account.id
+  name       = "preview"
+  type       = "self_hosted"
+  destinations = [{
+    type = "all_preview_workers",
+  }]
+  policies = [{
+    id         = cloudflare_zero_trust_access_policy.preview.id,
+    precedence = 1
+  }]
+}
+
+resource "cloudflare_zero_trust_access_policy" "preview" {
+  account_id = data.cloudflare_zone.main.account.id
+  decision   = "allow"
+  name       = "preview"
+  include = [
+    {
+      email_domain = {
+        domain = "gmail.com"
+      }
+    }
+  ]
+}
+
+resource "cloudflare_zero_trust_access_identity_provider" "onetimepin" {
+  account_id = data.cloudflare_zone.main.account.id
+  name       = "onetimepin"
+  type       = "onetimepin"
+  config     = {}
+}
