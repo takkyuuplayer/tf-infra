@@ -101,11 +101,6 @@ resource "cloudflare_zero_trust_access_policy" "preview" {
       email_domain = {
         domain = "gmail.com"
       }
-    },
-    {
-      email = {
-        email = "takafumi_sekiguchi@takkyuuplayer.com"
-      }
     }
   ]
 }
