@@ -2,7 +2,6 @@ locals {
   github_repos = toset([
     "aws-provisioning",
     "go-exercise",
-    "homepage4.0",
     "homepage5",
     "rb-exercise",
     "rs-exercise",
