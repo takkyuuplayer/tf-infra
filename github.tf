@@ -1,6 +1,7 @@
 locals {
   github_repos = toset([
     "aws-provisioning",
+    "cloudflare-exercise",
     "go-exercise",
     "homepage5",
     "rb-exercise",
